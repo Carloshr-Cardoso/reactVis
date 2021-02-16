@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import './assets/css/App.css';
 import {Group} from '@vx/group';
 import {Pie} from '@vx/shape';
-import {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF} from './data/DataParse';
+
 import BrazilMap from './data/BrazilMap.json';
+import {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF} from './data/DataParse';
+
+import './assets/css/App.css';
 
 const width  = window.innerWidth  || document.documentElement.clientWidth || document.body.clientWidth;
 const height = window.innerHeight || document.documentElement.clientHeight|| document.body.clientHeight;
@@ -23,13 +25,13 @@ const App = () => {
   {unidades.map(({uf, unidades})=>(
     prisionFilters[uf] ? cont += unidades: null
   ))}
-  // console.log(prisionFilters);
+
+
   return (
     <React.Fragment>
       <div className="navbar"></div>
-      {/* <section className="container"></section> */}
       <div className="container">
-      <h1 className="title">Try This, Bitch</h1>
+      <h1 className="title">Merda de Trabalho</h1>
         <div className="content">
           <div className="map">
             <svg
@@ -123,30 +125,6 @@ const App = () => {
             </div>
           </div>
 
-          {/* <table className="uf-units">
-            <h1>Unidades Prisionais</h1>
-            <thead>
-              <tr>
-                <th><strong></strong></th>
-                <th><strong></strong></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{""}</td>
-                <td>{""}</td>
-              </tr>
-              {unidades.map(({uf, unidades}) =>{
-                return(
-                  <tr>
-                    <td>{uf}</td>
-                    <td>{unidades}</td>
-                  </tr>
-                )
-              }
-              )}
-            </tbody>
-          </table> */}
         </div>
       </div>
 
