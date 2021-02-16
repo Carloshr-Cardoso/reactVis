@@ -135,7 +135,7 @@ const App = () => {
 export default App;
 
 
-
+// TODO List
 // *Achar um jeito de Concatenar todos os Arrays de Dados considerando os estados Selecionados.
 // *Fazer Gráfico de Barras para os Presos Provisórios e Sentenciados (Separados por gênero).
 // *Criar Gráfico de Pena Sentenciada Para os Presos Sentenciados.
