@@ -31,7 +31,7 @@ const App = () => {
     <React.Fragment>
       <div className="navbar"></div>
       <div className="container">
-      <h1 className="title">Merda de Trabalho</h1>
+      <h1 className="title">Trabalho Escroto da Porra</h1>
         <div className="content">
           <div className="map">
             <svg
