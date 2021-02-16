@@ -18,7 +18,7 @@ const getPrisionUnitsByUF = () =>{
 const getFilterPrisionByUF = () =>{
   const initialFilter = data.reduce((acc, {uf}) =>({
     ...acc,
-    [uf] : true
+    [uf] : false
   }), {})
 
   return initialFilter;
