@@ -5,17 +5,27 @@ body{
   font-weight: 300; */
   line-height: 1.5em;
 }
+.wrapper{
+  max-height: 300px;
+  width: 40%;
+  margin-left: 3rem;
+}
+.stackedBar-svg{
+  overflow: visible;
+}
 
 .container {
   position: relative;
   top: -2rem;
   width: 90%;
-  height: 51rem;
+  min-height: 53rem;
   background: #282c34;
   margin: auto;
   padding: 10px;
 }
-
+.svg-bar{
+  overflow: visible;
+}
 .title{
   color: #F4A261;
   padding-left: 8rem;
@@ -65,7 +75,8 @@ body{
 }
 
 .total-sum{
-  padding-right: 55px;
+  font-size: 20px;
+  /* padding-right: 55px; */
 }
 .uf-units{
   width: 300px;
@@ -77,6 +88,10 @@ body{
   text-align: right;
   color: #F4A261;
   font-size: 30px;
+}
+
+.presos{
+  color: #F4A261;
 }
 
 .prision-filter{

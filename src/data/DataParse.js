@@ -43,4 +43,39 @@ const getAtributesByUF = (atribute) =>{
   return someAtributeByStates
 }
 
-export {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF};
+//Atributes = Array de Strings
+const getSumOfAtributesByUF = (atributes) => {
+  const attrArr = [];
+  atributes.map((atribute)=>{
+    const someAtribute = data.reduce((pv, cv) => {
+      if ( pv[cv.uf] ) {
+        if (cv[atribute] != '')
+          pv[cv.uf] += cv[atribute];
+      } else {
+          pv[cv.uf] = cv[atribute];
+      }
+      return pv;
+    }, {});
+
+    attrArr.push(someAtribute)
+
+  })
+  // console.log(attrArr);
+  const sumAttr = {};
+  Object.keys(attrArr[0]).map(uf => sumAttr[uf] = 0);  
+  attrArr.map((arr)=>{
+    Object.keys(arr).map((key)=>{
+      if (!arr[key] == "")
+        sumAttr[key] += arr[key];
+    });
+  });
+  // console.log(sumAttr);
+  const SumOfAtributesByUF = Object.entries(sumAttr).map(([k, v]) => ({
+    label: k,
+    value: v
+  }));
+  
+  return SumOfAtributesByUF;
+}
+
+export {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF, getSumOfAtributesByUF};

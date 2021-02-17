@@ -1,12 +1,39 @@
 import React, { useState } from 'react'
 import {Group} from '@vx/group';
-import {Pie} from '@vx/shape';
+import {Pie, BarGroup} from '@vx/shape';
+import {scaleBand, scaleLinear, scaleOrdinal} from '@vx/scale';
+import StackedBarChart from './StackedBarChart';
 
 import BrazilMap from './data/BrazilMap.json';
-import {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF} from './data/DataParse';
-
+import {
+  getPrisionUnitsByUF, 
+  getAtributesByUF, 
+  getFilterPrisionByUF, 
+  getSumOfAtributesByUF
+} from './data/DataParse';
 import './assets/css/App.css';
 
+const allKeys = ["Homens", "Mulheres"];
+
+const colors = {
+  "Homens": "#4EA8DE",
+  "Mulheres": "#6930C3"
+}
+
+const attrsMas = [
+  "regime_fechado_masculino",
+  "regime_semiaberto_masculino",
+  "regime_aberto_masculino",
+  "regime_disciplinar_diferenciado_masculino",
+  "internacao_masculino" 
+];
+const attrsFem = [
+  "regime_fechado_feminino",
+  "regime_semiaberto_feminino",
+  "regime_aberto_feminino",
+  "regime_disciplinar_diferenciado_feminino",
+  "internacao_feminino" 
+];
 const width  = window.innerWidth  || document.documentElement.clientWidth || document.body.clientWidth;
 const height = window.innerHeight || document.documentElement.clientHeight|| document.body.clientHeight;
 
@@ -16,16 +43,51 @@ const prisionUnitsFilter = getFilterPrisionByUF();
 const pProvisMas = getAtributesByUF("populacao_presos_provisorios_masculino");
 const pProvisFem = getAtributesByUF("populacao_presos_provisorios_feminino");
 
+const pSentenMas = getSumOfAtributesByUF(attrsMas);
+const pSentenFem = getSumOfAtributesByUF(attrsFem);
+
 
 const App = () => {
   const [prisionFilters, setPrisionFilters] = useState(prisionUnitsFilter);
-  const [somaUnidades, setSomaUnidades] = useState(0);
   const unidades = unidades_p_estado.filter(({uf}) => prisionFilters[uf]);
-  let cont = 0;
-  {unidades.map(({uf, unidades})=>(
-    prisionFilters[uf] ? cont += unidades: null
-  ))}
 
+  let somaUnidades = 0;
+  unidades.map(({uf, unidades})=>(
+    prisionFilters[uf] ? somaUnidades += unidades: null
+  ));
+
+  let somaProvisMas = 0;
+  pProvisMas.map(({label, value})=>(
+    prisionFilters[label] ? somaProvisMas += value: null
+  ));
+
+  let somaProvisFem = 0;
+  pProvisFem.map(({label, value})=>(
+    prisionFilters[label] ? somaProvisFem += value: null
+  ));
+
+  let somaSentenMas = 0;
+  pSentenMas.map(({label, value})=>(
+    prisionFilters[label] ? somaSentenMas += value: null
+  ));
+
+  let somaSentenFem = 0;
+  pSentenFem.map(({label, value})=>(
+    prisionFilters[label] ? somaSentenFem += value: null
+  ));
+
+  const data = [
+    {
+      label: "Provisorios",
+      Homens: somaProvisMas,
+      Mulheres: somaProvisFem 
+    },
+    {
+      label: "Sentenciados",
+      Homens: somaSentenMas,
+      Mulheres: somaSentenFem 
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -59,7 +121,7 @@ const App = () => {
                   strokeLinejoin="round"
                   d={d}
                   />
-                <text transform={textTransform} fill="#FFF">
+                <text fontSize={15} transform={textTransform} fill="#FFF">
                   {uf}
                 </text>
                 {circlePath ? 
@@ -79,13 +141,12 @@ const App = () => {
             </svg>
           </div>
 
-
-          <svg className="pieChart" width={450} height={450}>
-            <Group top={210} left={200}>
+          <svg className="pieChart" width={502} height={502}>
+            <Group top={251} left={251}>
               <Pie 
               data={unidades_p_estado}
               pieValue={d => d.unidades}
-              innerRadius={200}
+              innerRadius={250}
               outerRadius={50}
               >
                 { pie => {
@@ -104,6 +165,7 @@ const App = () => {
               </Pie>
             </Group>
           </svg>
+
           <div className="total-sum">
             <h1>Unidades Prisionais</h1>
             <div className="uf-units">
@@ -120,11 +182,23 @@ const App = () => {
             </div>
             <hr/>
             <div className="prision-filter">
-              <h3>{cont}</h3>
+              <h3>{somaUnidades}</h3>
               <h4>Unidades Prisionais Selecionadas</h4>
             </div>
           </div>
 
+        </div>
+
+        <div className="presos">
+          {/* {somaSentenMas > 0 ? <h1>{`Prisioneiros Sentenciados: ${somaSentenMas}`}</h1>: null}
+          {somaProvisMas > 0 ? <h1>{`Prisioneiros Provisórios: ${somaProvisMas}`}</h1>: null} */}
+            <h2>Stacked Bar Chart D3</h2>,
+            <StackedBarChart data={data} keys={allKeys} colors={colors}/>
+          {/* {somaProvisMas > 0 ?(
+            )
+            :
+            null
+          } */}
         </div>
       </div>
 
@@ -137,6 +211,7 @@ export default App;
 
 // TODO List
 // *Achar um jeito de Concatenar todos os Arrays de Dados considerando os estados Selecionados.
-// *Fazer Gráfico de Barras para os Presos Provisórios e Sentenciados (Separados por gênero).
+// *Fazer Filtro de Sexo para Grafico de Barra Empilhada
+// Adicionar Legenda Hover ao Grafico de Barra
 // *Criar Gráfico de Pena Sentenciada Para os Presos Sentenciados.
 // *Criar Gráfico de Gauge (Gauge Chart) Sobre os Presos provisórios que estão presos a mais de 90 dias.
