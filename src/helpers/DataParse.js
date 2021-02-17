@@ -1,4 +1,4 @@
-import data from './csvjson.json';
+import data from '../data/csvjson.json';
 
 const getPrisionUnitsByUF = () =>{
   const countUnits = data.reduce((acc, {uf}) =>({
