@@ -7,7 +7,7 @@ body{
 }
 .wrapper{
   max-height: 300px;
-  width: 40%;
+  width: 33.33%;
   margin-left: 3rem;
 }
 .stackedBar-svg{
@@ -72,6 +72,16 @@ body{
 
 .pieSelector:hover path {
   fill: #C0BC73 !important
+}
+.select-all-buttom{
+  cursor: pointer;
+  /* background-color: #F4A261; */
+  padding: 2px 5px 2px 5px;
+  border-radius: 10px;
+}
+
+.select-all-buttom:hover{
+  transform: translateY(-2px);
 }
 
 .total-sum{

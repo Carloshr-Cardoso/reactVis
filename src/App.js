@@ -1,53 +1,40 @@
+import './assets/css/App.css';
 import React, { useState } from 'react'
-import {Group} from '@vx/group';
-import {Pie, BarGroup} from '@vx/shape';
-import {scaleBand, scaleLinear, scaleOrdinal} from '@vx/scale';
-import StackedBarChart from './StackedBarChart';
 
-import BrazilMap from './data/BrazilMap.json';
+import StackedBarChart from './components/charts/StackedBarChart';
+import PieChart from './components/charts/PieChart';
+import BrazilMap from './components/map/BrazilMap';
+
 import {
   getPrisionUnitsByUF, 
   getAtributesByUF, 
   getFilterPrisionByUF, 
   getSumOfAtributesByUF
-} from './data/DataParse';
-import './assets/css/App.css';
+} from './helpers/DataParse';
+import {
+  fieldProvisoriosM,
+  fieldProvisoriosF,
+  fieldsSentenciadosM, 
+  fieldsSentenciadosF,
+  allKeys,
+  colors
+} from './helpers/auxVariables'
+import ListPrisionUnits from './components/charts/ListPrisionUnits';
 
-const allKeys = ["Homens", "Mulheres"];
-
-const colors = {
-  "Homens": "#4EA8DE",
-  "Mulheres": "#6930C3"
-}
-
-const attrsMas = [
-  "regime_fechado_masculino",
-  "regime_semiaberto_masculino",
-  "regime_aberto_masculino",
-  "regime_disciplinar_diferenciado_masculino",
-  "internacao_masculino" 
-];
-const attrsFem = [
-  "regime_fechado_feminino",
-  "regime_semiaberto_feminino",
-  "regime_aberto_feminino",
-  "regime_disciplinar_diferenciado_feminino",
-  "internacao_feminino" 
-];
-const width  = window.innerWidth  || document.documentElement.clientWidth || document.body.clientWidth;
-const height = window.innerHeight || document.documentElement.clientHeight|| document.body.clientHeight;
 
 const unidades_p_estado = getPrisionUnitsByUF();
 const prisionUnitsFilter = getFilterPrisionByUF();
 
-const pProvisMas = getAtributesByUF("populacao_presos_provisorios_masculino");
-const pProvisFem = getAtributesByUF("populacao_presos_provisorios_feminino");
+const pProvisMas = getAtributesByUF(fieldProvisoriosM);
+const pProvisFem = getAtributesByUF(fieldProvisoriosF);
 
-const pSentenMas = getSumOfAtributesByUF(attrsMas);
-const pSentenFem = getSumOfAtributesByUF(attrsFem);
+const pSentenMas = getSumOfAtributesByUF(fieldsSentenciadosM);
+const pSentenFem = getSumOfAtributesByUF(fieldsSentenciadosF);
 
 
 const App = () => {
+  const [selectAllButtom, setSelectAllButtom] = useState(false);
+
   const [prisionFilters, setPrisionFilters] = useState(prisionUnitsFilter);
   const unidades = unidades_p_estado.filter(({uf}) => prisionFilters[uf]);
 
@@ -76,7 +63,7 @@ const App = () => {
     prisionFilters[label] ? somaSentenFem += value: null
   ));
 
-  const data = [
+  const StackedBarData = [
     {
       label: "Provisorios",
       Homens: somaProvisMas,
@@ -89,117 +76,33 @@ const App = () => {
     },
   ];
 
+  // if (selectAllButtom){
+  //   const filterKeys = Object.keys(prisionFilters);
+  //   filterKeys.map((key)=>{
+  //     const newObj = {... prisionFilters};
+  //     newObj[key] = true;
+  //     setPrisionFilters(newObj);
+  //   })
+  // }
+  // else{
+  //   console.log("Deselecionando Tudo")
+  // }
+
+
   return (
     <React.Fragment>
       <div className="navbar"></div>
       <div className="container">
       <h1 className="title">Trabalho Escroto da Porra</h1>
         <div className="content">
-          <div className="map">
-            <svg
-              id="svg-map"
-              x="0px" 
-              y="0px"
-              width="450px" 
-              height="460px" 
-              viewBox="0 0 450 460" 
-              enableBackground="new 0 0 450 460"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              width={450}
-              height={460}
-              viewBox="0 0 450 460"
-            >
-            {BrazilMap.map(({name, uf, d, circlePath, circlePathD, textTransform})=>(
-              <a key={uf} className="estado" name={name} uf={uf}>
-                <path
-                  onClick={()=> setPrisionFilters({...prisionFilters, [uf]:!prisionFilters[uf]})}
-                  fill={prisionFilters[uf] ? 'rgba(42,157,143,1)' : 'rgba(38,70,83,1)'}
-                  stroke="#FFF"
-                  strokeWidth={.5}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d={d}
-                  />
-                <text fontSize={15} transform={textTransform} fill="#FFF">
-                  {uf}
-                </text>
-                {circlePath ? 
-                  <path 
-                    onClick={()=> setPrisionFilters({...prisionFilters, [uf]:!prisionFilters[uf]})}
-                    strokeWidth={.5}
-                    fill={prisionFilters[uf] ? 'rgba(42,157,143,1)' : 'rgba(40,114,113,1)'}
-                    className="circle"
-                    d={circlePathD}
-                  />
-                  :
-                  null
-                }
-                
-              </a>
-            ))}
-            </svg>
-          </div>
-
-          <svg className="pieChart" width={502} height={502}>
-            <Group top={251} left={251}>
-              <Pie 
-              data={unidades_p_estado}
-              pieValue={d => d.unidades}
-              innerRadius={250}
-              outerRadius={50}
-              >
-                { pie => {
-                    return pie.arcs.map(arc => {
-                      const [x, y] = pie.path.centroid(arc);
-                      return (
-                        <g className="pieSelector" key={arc.data.uf} onClick={()=> setPrisionFilters({...prisionFilters, [arc.data.uf]:!prisionFilters[arc.data.uf]})}>
-                          <path fill={prisionFilters[arc.data.uf] ? 'rgba(42,157,143,1)' : 'rgba(38,70,83,1)'} d={pie.path(arc)} />
-                          <text textAnchor="middle" fontSize={12} fill="white" x={x*1.35} y={y*1.35}>{arc.data.uf}</text>
-                          <text textAnchor="middle" fontSize={12} fill="white" x={x} y={y}>{arc.data.unidades}</text>
-                        </g>
-                      )
-                    } )
-                  }
-                }
-              </Pie>
-            </Group>
-          </svg>
-
-          <div className="total-sum">
-            <h1>Unidades Prisionais</h1>
-            <div className="uf-units">
-                {unidades.map(({uf, unidades}) =>{
-                  return(
-                      <div className="prision-filter">
-                        <h3>{unidades}</h3>
-                        <h4>Unidades Prisionais em</h4>
-                        <h3>{uf}</h3>
-                      </div>
-                    )
-                  }
-                )}
-            </div>
-            <hr/>
-            <div className="prision-filter">
-              <h3>{somaUnidades}</h3>
-              <h4>Unidades Prisionais Selecionadas</h4>
-            </div>
-          </div>
-
+          <BrazilMap prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+          <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+          <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
         </div>
-
-        <div className="presos">
-          {/* {somaSentenMas > 0 ? <h1>{`Prisioneiros Sentenciados: ${somaSentenMas}`}</h1>: null}
-          {somaProvisMas > 0 ? <h1>{`Prisioneiros Provisórios: ${somaProvisMas}`}</h1>: null} */}
-            <h2>Stacked Bar Chart D3</h2>,
-            <StackedBarChart data={data} keys={allKeys} colors={colors}/>
-          {/* {somaProvisMas > 0 ?(
-            )
-            :
-            null
-          } */}
-        </div>
+          <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
+        {/* <div className="presos">
+          <h2>Stacked Bar Chart D3</h2>
+        </div> */}
       </div>
 
     </React.Fragment>

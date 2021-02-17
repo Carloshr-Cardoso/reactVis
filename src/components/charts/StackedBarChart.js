@@ -1,6 +1,6 @@
 import { select, scaleBand, axisBottom, stack, max, scaleLinear, axisLeft, stackOrderAscending } from 'd3';
 import React, {useEffect, useRef} from 'react';
-import useResizeObserver from './useResizeObserver';
+import useResizeObserver from '../../hooks/useResizeObserver';
 
 const StackedBarChart = ({ data, keys, colors }) => {
   const svgRef = useRef();
@@ -62,11 +62,14 @@ const StackedBarChart = ({ data, keys, colors }) => {
 
   return (
     <React.Fragment>
-      <div className="wrapper" ref={wrapperRef} style={{ marginBottom: "2rem" }}>
-        <svg className="stackedBar-svg" width={dimensions ? dimensions.width : 300} height={dimensions ? dimensions.height: 300} ref={svgRef}>
-          <g className="x-axis"/>
-          <g className="y-axis"/>
-        </svg>
+      <div className="presos">
+        <h2>Stacked Bar Chart D3</h2>
+        <div className="wrapper" ref={wrapperRef} style={{ marginBottom: "2rem" }}>
+          <svg className="stackedBar-svg" width={dimensions ? dimensions.width : 300} height={dimensions ? dimensions.height: 300} ref={svgRef}>
+            <g className="x-axis"/>
+            <g className="y-axis"/>
+          </svg>
+        </div>
       </div>
     </React.Fragment>
   );
