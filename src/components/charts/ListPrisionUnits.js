@@ -16,7 +16,7 @@ const ListPrisionUnits = ({unidades, somaUnidades}) => {
             }
           )}
       </div>
-      <hr/>
+      {/* <hr/> */}
       <div className="prision-filter">
         <h3>{somaUnidades}</h3>
         <h4>Unidades Prisionais Selecionadas</h4>

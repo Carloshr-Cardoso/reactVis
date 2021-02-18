@@ -16,9 +16,12 @@ export const fieldsSentenciadosF = [
   "internacao_feminino" 
 ];
 
+export const fieldProvisorios90DiasM = "presos_provisorios_com_mais_de_90_dias_de_prisao_masculino";
+export const fieldProvisorios90DiasF = "presos_provisorios_com_mais_de_90_dias_de_prisao_feminino";
+
 // Para Grafico de Barras Empilhadas (Chaves e Cores)
 export const allKeys = ["Homens", "Mulheres"];
 export const colors = {
   "Homens": "#4EA8DE",
-  "Mulheres": "#6930C3"
+  "Mulheres": "#E56B6F"
 }

@@ -1,9 +1,14 @@
+// Import React & CSS
 import './assets/css/App.css';
 import React, { useState } from 'react'
 
+// Import Components
 import StackedBarChart from './components/charts/StackedBarChart';
 import PieChart from './components/charts/PieChart';
 import BrazilMap from './components/map/BrazilMap';
+import ListPrisionUnits from './components/charts/ListPrisionUnits';
+import GaugeChart from './components/charts/GaugeChart';
+import Navbar from './components/navbar'
 
 import {
   getPrisionUnitsByUF, 
@@ -16,10 +21,11 @@ import {
   fieldProvisoriosF,
   fieldsSentenciadosM, 
   fieldsSentenciadosF,
+  fieldProvisorios90DiasM,
+  fieldProvisorios90DiasF,
   allKeys,
   colors
 } from './helpers/auxVariables'
-import ListPrisionUnits from './components/charts/ListPrisionUnits';
 
 
 const unidades_p_estado = getPrisionUnitsByUF();
@@ -27,6 +33,9 @@ const prisionUnitsFilter = getFilterPrisionByUF();
 
 const pProvisMas = getAtributesByUF(fieldProvisoriosM);
 const pProvisFem = getAtributesByUF(fieldProvisoriosF);
+
+const provisMais90M = getAtributesByUF(fieldProvisorios90DiasM);
+const provisMais90F = getAtributesByUF(fieldProvisorios90DiasF);
 
 const pSentenMas = getSumOfAtributesByUF(fieldsSentenciadosM);
 const pSentenFem = getSumOfAtributesByUF(fieldsSentenciadosF);
@@ -63,6 +72,23 @@ const App = () => {
     prisionFilters[label] ? somaSentenFem += value: null
   ));
 
+  let somaProvisMais90M = 0;
+  provisMais90M.map(({label, value})=>(
+    prisionFilters[label] ? somaProvisMais90M += value: null
+  ));
+
+  let somaProvisMais90F = 0;
+  provisMais90F.map(({label, value})=>(
+    prisionFilters[label] ? somaProvisMais90F += value: null
+  ));
+  
+
+  let provisPercent = ((somaProvisMais90M + somaProvisMais90F)/(somaProvisMas + somaProvisFem)).toFixed(3);
+  let sentenPercent = (1 - provisPercent).toFixed(3);
+  
+  const gaugeData = [provisPercent, sentenPercent];
+  const baseGauge = [0.5, 0.5]
+
   const StackedBarData = [
     {
       label: "Provisorios",
@@ -76,35 +102,35 @@ const App = () => {
     },
   ];
 
-  // if (selectAllButtom){
-  //   const filterKeys = Object.keys(prisionFilters);
-  //   filterKeys.map((key)=>{
-  //     const newObj = {... prisionFilters};
-  //     newObj[key] = true;
-  //     setPrisionFilters(newObj);
-  //   })
-  // }
-  // else{
-  //   console.log("Deselecionando Tudo")
-  // }
-
-
   return (
     <React.Fragment>
       <div className="navbar"></div>
-      <div className="container">
-      <h1 className="title">Trabalho Escroto da Porra</h1>
-        <div className="content">
-          <BrazilMap prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
-          <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
-          <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
-        </div>
-          <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
-        {/* <div className="presos">
-          <h2>Stacked Bar Chart D3</h2>
-        </div> */}
-      </div>
+        <div className="container">
+        <h1 className="title">Trabalho Escroto da Porra</h1>
 
+          <div className="flex-container">
+            <div className="flex-child">
+            <BrazilMap prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+            </div>
+            <div className="flex-child">
+            <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+            </div>
+            <div className="flex-child">
+            <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
+            </div>
+          </div>
+
+
+          <div className="flex-container">
+            <div className="flex-child">
+              <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
+            </div>
+            <div id="gaugeChart" className="flex-child">
+              {somaUnidades ? <GaugeChart data={gaugeData} base={false}/> : <GaugeChart data={baseGauge} base={true}/>}
+            </div>
+          </div>
+
+        </div>
     </React.Fragment>
   );
 }
