@@ -63,9 +63,18 @@ const StackedBarChart = ({ data, keys, colors }) => {
   return (
     <React.Fragment>
       <div className="presos">
-        <h2>Stacked Bar Chart D3</h2>
+        {/* <h2>Stacked Bar Chart D3</h2> */}
         <div className="wrapper" ref={wrapperRef} style={{ marginBottom: "2rem" }}>
           <svg className="stackedBar-svg" width={dimensions ? dimensions.width : 300} height={dimensions ? dimensions.height: 300} ref={svgRef}>
+            
+            {/* Inicio Teste */}
+            <rect width="15" height="15" fill={colors["Homens"]} x="15" y="15"/>
+            <text x="40" y="28" fill={colors["Homens"]} style={{fontWeight:600}}>Homens</text>
+            
+            <rect width="15" height="15" fill={colors["Mulheres"]} x="15" y="40"/>
+            <text x="40" y="53" fill={colors["Mulheres"]} style={{fontWeight:600}}>Mulheres</text>
+            {/* FIM */}
+            
             <g className="x-axis"/>
             <g className="y-axis"/>
           </svg>
