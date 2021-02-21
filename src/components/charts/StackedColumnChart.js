@@ -2,11 +2,12 @@ import { select, scaleBand, axisBottom, stack, max, scaleLinear, axisLeft, stack
 import React, {useEffect, useRef} from 'react';
 import useResizeObserver from '../../hooks/useResizeObserver';
 
-const StackedBarChart = ({ data, keys, colors }) => {
+const StackedColumnChart = ({ data, keys, colors }) => {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-
+  // console.log("*** Components.StackedBarChart.DATA ***")
+  // console.log(data)
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -90,7 +91,7 @@ const StackedBarChart = ({ data, keys, colors }) => {
   return (
     <React.Fragment>
       <div className="presos">
-        <h2>Stacked Bar Chart D3</h2>
+        {/* <h2>Stacked Bar Chart D3</h2> */}
         <div className="wrapper" ref={wrapperRef} style={{ marginBottom: "2rem" }}>
           <svg className="stackedBar-svg" width={dimensions ? dimensions.width : 300} height={dimensions ? dimensions.height: 300} ref={svgRef}>            
             <g className="x-axis"/>
@@ -103,4 +104,4 @@ const StackedBarChart = ({ data, keys, colors }) => {
 
 }
 
-export default StackedBarChart;
+export default StackedColumnChart;

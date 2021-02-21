@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 
 // Import Components
 import StackedBarChart from './components/charts/StackedBarChart';
+import StackedColumnChart from './components/charts/StackedColumnChart';
+import RadialStackedBarChart from './components/charts/RadialStackedBarChart';
 import PieChart from './components/charts/PieChart';
 import BrazilMap from './components/map/BrazilMap';
 import ListPrisionUnits from './components/charts/ListPrisionUnits';
@@ -14,18 +16,21 @@ import {
   getPrisionUnitsByUF, 
   getAtributesByUF, 
   getFilterPrisionByUF, 
-  getSumOfAtributesByUF
+  getSumOfAtributesByUF,
+  getSomeAtributesByUF
 } from './helpers/DataParse';
 import {
   fieldProvisoriosM,
   fieldProvisoriosF,
   fieldsSentenciadosM, 
   fieldsSentenciadosF,
+  fieldsSentenciadosAgeM, 
+  fieldsSentenciadosAgeF,
   fieldProvisorios90DiasM,
   fieldProvisorios90DiasF,
   allKeys,
   colors
-} from './helpers/auxVariables'
+} from './helpers/auxVariables';
 
 
 const unidades_p_estado = getPrisionUnitsByUF();
@@ -39,6 +44,8 @@ const provisMais90F = getAtributesByUF(fieldProvisorios90DiasF);
 
 const pSentenMas = getSumOfAtributesByUF(fieldsSentenciadosM);
 const pSentenFem = getSumOfAtributesByUF(fieldsSentenciadosF);
+
+
 
 
 const App = () => {
@@ -101,6 +108,70 @@ const App = () => {
       Mulheres: somaSentenFem 
     },
   ];
+  const auxAgeLabels = [
+    "18 a 24 anos",
+    "25 a 29 anos",
+    "30 a 34 anos",
+    "35 a 45 anos",
+    "46 a 60 anos",
+    "61 a 70 anos",
+    "Mais de 70",  
+    "Não Informada",
+    "total"
+  ]
+  const faixaEtariaData = [];
+  for (let i=0; i<fieldsSentenciadosAgeM.length; i++){
+    const auxM = getAtributesByUF(fieldsSentenciadosAgeM[i]);
+    const auxF = getAtributesByUF(fieldsSentenciadosAgeF[i]);
+
+    let somaAuxM = 0;
+    auxM.map(({label, value})=>(
+    prisionFilters[label] ? somaAuxM += value: null
+  ));
+
+    let somaAuxF = 0;
+    auxF.map(({label, value})=>(
+    prisionFilters[label] ? somaAuxF += value: null
+  ));
+
+    faixaEtariaData.push(
+      {
+        label: auxAgeLabels[i],
+        Homens: somaAuxM,
+        Mulheres: somaAuxF
+      }
+    )
+  }
+
+  const faixasEtariasByUf = [];
+  unidades_p_estado.map(({uf})=>{
+    faixasEtariasByUf.push(
+      {
+        "uf": uf
+      }
+    )
+  })
+
+  // Pega as Faixas Etarias por UF
+  const faixaEtariaTesteData = [];
+  for (let i=0; i<fieldsSentenciadosAgeM.length; i++){
+    const auxM = getSumOfAtributesByUF([fieldsSentenciadosAgeM[i],fieldsSentenciadosAgeF[i]]);
+    auxM.map(({label, value}, i)=>(
+      !prisionFilters[label] ? auxM[i].value = 0 : null
+    ));
+    // console.log(auxM)
+    faixaEtariaTesteData.push(auxM);
+  }
+  faixaEtariaTesteData.push(getAtributesByUF("populacao_prisional_total"));
+
+  // console.log(faixaEtariaTesteData);
+
+  faixasEtariasByUf.map((obj, i)=>{
+    faixaEtariaTesteData.map((v, index)=>{
+      obj[auxAgeLabels[index]] = v[i].value;
+    })
+  })
+  
 
   return (
     <React.Fragment>
@@ -116,19 +187,31 @@ const App = () => {
             <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
             </div>
             <div className="flex-child">
+              <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
+            </div>
+            <div className="flex-child list-Units">
             <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
             </div>
           </div>
 
 
           <div className="flex-container">
-            <div className="flex-child">
+            {/* <div className="flex-child">
               <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
-            </div>
+            </div> */}
             <div id="gaugeChart" className="flex-child">
               {somaUnidades ? <GaugeChart data={gaugeData} base={false}/> : <GaugeChart data={baseGauge} base={true}/>}
             </div>
+            <div className="flex-child">
+              <RadialStackedBarChart data={faixasEtariasByUf} keys={auxAgeLabels} />
+            </div>
           </div>
+
+          {/* <div className="flex-container">
+            <div className="flex-child">
+            <StackedColumnChart data={faixaEtariaData} keys={allKeys} colors={colors}/>
+            </div>
+          </div> */}
 
         </div>
     </React.Fragment>
@@ -143,4 +226,4 @@ export default App;
 // *Fazer Filtro de Sexo para Grafico de Barra Empilhada
 // Adicionar Legenda Hover ao Grafico de Barra
 // *Criar Gráfico de Pena Sentenciada Para os Presos Sentenciados.
-// *Criar Gráfico de Gauge (Gauge Chart) Sobre os Presos provisórios que estão presos a mais de 90 dias.
+// Adicionar Botão de Seleção por Região (Norte, Nordeste, Centro-oeste, Sudeste, Sul)
