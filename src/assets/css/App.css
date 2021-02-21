@@ -13,11 +13,22 @@ body{
 .stackedBar-svg{
   overflow: visible;
 }
+.RadialStackedBar-svg{
+  overflow: visible;
+  font-size: 25px;
+  background-color: none;
+}
+
+.radialStackedView{
+  min-height: 30rem;
+}
 
 /* Flex Container teste */
 .flex-container{
   display: flex;
   padding-bottom: 2rem;
+  border-width: 1px;
+  border-color: yellow;
 }
 
 .flex-child{
@@ -29,7 +40,7 @@ body{
 .container {
   position: relative;
   top: -4rem;
-  width: 90%;
+  width: 95%;
   min-height: 53rem;
   background: #282c34;
   margin: auto;
@@ -42,6 +53,10 @@ body{
   color: #F4A261;
   padding-left: 8rem;
   font-size: 35px;
+}
+
+.list-Units{
+  max-width: 5rem;
 }
 
 .navbar{
@@ -114,14 +129,27 @@ body{
   margin: 0 auto;
 }
 
+.uf-units h3{
+  text-align: left;
+  margin: 0;
+  margin-bottom: 5px;
+  padding: 0;
+}
+
 .total-sum h1{
-  text-align: right;
+  text-align: left;
   color: #F4A261;
   font-size: 30px;
 }
 
 .presos{
+  text-align: center;
+  padding-bottom: 2rem;
   color: #F4A261;
+}
+
+.gauge{
+  padding-bottom: 1.3rem;
 }
 
 .prision-filter{

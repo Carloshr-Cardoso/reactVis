@@ -61,7 +61,7 @@ const GaugeChart = ({ data, base }) => {
       .attr("y", (instruction, index) => (index === 0 ? '28' : '53'))
       .attr("fill", base ? "none":((instruction, index) => (index === 0 ? '#f94144' : '#90be6d')))
       .attr("font-weight", "600")
-      .text(base ? "none":((instruction, index) => (index === 0 ? instruction.data : instruction.data)));
+      .text(base ? "none":((instruction, index) => (index === 0 ? `${(instruction.data*100).toFixed(2)}%` : `${(instruction.data*100).toFixed(2)}%`)));
 
     svg
       .selectAll(".slice")
@@ -88,7 +88,7 @@ const GaugeChart = ({ data, base }) => {
   return (
     <React.Fragment>
       <div className="presos">
-        {/* <h2>Gauge Chart D3</h2> */}
+        <h2 className="gauge">Gauge Chart D3</h2>
         <div className="wrapper" ref={wrapperRef}>
           <svg
             className="stackedBar-svg" 

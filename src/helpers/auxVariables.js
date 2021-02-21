@@ -16,6 +16,28 @@ export const fieldsSentenciadosF = [
   "internacao_feminino" 
 ];
 
+export const fieldsSentenciadosAgeM = [
+  "18_24_anos_masculino",
+  "25_29_anos_masculino",
+  "30_34_anos_masculino",
+  "35_45_anos_masculino",
+  "46_60_anos_masculino",
+  "61_70_anos_masculino",
+  "mais_de_70_anos_masculino",  
+  "faixa_etaria_nao_informada_masculino"
+];
+
+export const fieldsSentenciadosAgeF = [
+  "18_24_anos_feminino",
+  "25_29_anos_feminino",
+  "30_34_anos_feminino",
+  "35_45_anos_feminino",
+  "46_60_anos_feminino",
+  "61_70_anos_feminino",
+  "mais_de_70_anos_feminino",
+  "faixa_etaria_nao_informada_feminino"
+];
+
 export const fieldProvisorios90DiasM = "presos_provisorios_com_mais_de_90_dias_de_prisao_masculino";
 export const fieldProvisorios90DiasF = "presos_provisorios_com_mais_de_90_dias_de_prisao_feminino";
 

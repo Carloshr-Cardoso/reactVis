@@ -78,4 +78,33 @@ const getSumOfAtributesByUF = (atributes) => {
   return SumOfAtributesByUF;
 }
 
-export {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF, getSumOfAtributesByUF};
+const getSomeAtributesByUF = (atributes) =>{
+  const atributesArr = [];
+  atributes.map((atribute, index)=>{
+    const someAtribute = data.reduce((pv, cv) => {
+      if ( pv[cv.uf] ) {
+        if (cv[atribute] != '')
+        pv[cv.uf] += cv[atribute];
+      } else {
+        pv[cv.uf] = cv[atribute];
+      }
+      return pv;
+    }, {});
+    
+    const someAtributeByStates = Object.entries(someAtribute).map(([k, v]) => ({
+      label: k,
+      value: v
+    }));
+
+    atributesArr.push(someAtributeByStates)
+  });
+
+  const someAtributeByStates = Object.entries(atributesArr)
+  // console.log("DataParse");
+  // console.log(someAtributeByStates);
+
+  return atributesArr;
+}
+
+
+export {getPrisionUnitsByUF, getAtributesByUF, getFilterPrisionByUF, getSumOfAtributesByUF, getSomeAtributesByUF};
