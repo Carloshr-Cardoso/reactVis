@@ -46,8 +46,6 @@ const pSentenMas = getSumOfAtributesByUF(fieldsSentenciadosM);
 const pSentenFem = getSumOfAtributesByUF(fieldsSentenciadosF);
 
 
-
-
 const App = () => {
   const [selectAllButtom, setSelectAllButtom] = useState(false);
 
@@ -88,13 +86,12 @@ const App = () => {
   provisMais90F.map(({label, value})=>(
     prisionFilters[label] ? somaProvisMais90F += value: null
   ));
-  
 
   let provisPercent = ((somaProvisMais90M + somaProvisMais90F)/(somaProvisMas + somaProvisFem)).toFixed(3);
   let sentenPercent = (1 - provisPercent).toFixed(3);
   
   const gaugeData = [provisPercent, sentenPercent];
-  const baseGauge = [0.5, 0.5]
+  const baseGauge = [0.5, 0.5];
 
   const StackedBarData = [
     {
@@ -119,6 +116,7 @@ const App = () => {
     "Não Informada",
     "total"
   ]
+  
   const faixaEtariaData = [];
   for (let i=0; i<fieldsSentenciadosAgeM.length; i++){
     const auxM = getAtributesByUF(fieldsSentenciadosAgeM[i]);
@@ -171,47 +169,106 @@ const App = () => {
       obj[auxAgeLabels[index]] = v[i].value;
     })
   })
-  
+
+  const clickFunction = (btnId, divId) => {
+    var btn = document.getElementById(btnId);
+    var container = document.getElementById(divId);
+    if (btn){
+      if(container.style.display === 'block') {
+        container.style.display = 'none';
+      } else {
+        container.style.display = 'block';
+      }
+    };
+  }
+    
 
   return (
     <React.Fragment>
       <div className="navbar"></div>
         <div className="container">
-        <h1 className="title">Trabalho Escroto da Porra</h1>
+        {/* <div className="Perguntas">
+        <h1 id="btn-div" onClick={()=>clickFunction("btn-div", "teste")}>Pergunta 1</h1>
+        </div> */}
 
-          <div className="flex-container">
-            <div className="flex-child">
-            <BrazilMap prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+
+        {/* <buttom className="title" id="btn-div">Trabalho Escroto da Porra</buttom> */}
+            <div className="flex-container">
+              <div className="flex-child">
+                <div id="btn-div" onClick={()=>clickFunction("btn-div", "teste")}>
+                  <div className="perguntas">
+                    <h2>Pergunta 1</h2>
+                    <p className="pergunta-text">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Nunc quam turpis, bibendum sed mattis quis, hendrerit sodales est.
+                      Nulla vitae est commodo, mattis quam id?
+                    </p>
+                  </div>
+                </div>
+
+                <div id="btn-div2" onClick={()=>clickFunction("btn-div2", "teste2")}>
+                  <div className="perguntas">
+                    <h2>Pergunta 2</h2>
+                    <p className="pergunta-text">
+                    Sed maximus nunc ut faucibus vestibulum. 
+                    Morbi placerat, purus eget condimentum mollis, sem odio tristique mauris, 
+                    a varius lacus massa ut libero. Nulla vehicula ex vehicula?
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-child">
+                <BrazilMap prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+              </div>
             </div>
-            <div className="flex-child">
-            <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+
+          <div id="teste">
+            <h1>Resposta 1</h1>
+            <div className="flex-container">
+              <div className="flex-child">
+              <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+              </div>
+              <div className="flex-child">
+                <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
+              </div>
+              <div className="flex-child list-Units">
+              <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
+              </div>
             </div>
-            <div className="flex-child">
-              <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
-            </div>
-            <div className="flex-child list-Units">
-            <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
+
+            <div className="flex-container">
+              <div id="gaugeChart" className="flex-child">
+                {somaUnidades ? <GaugeChart data={gaugeData} base={false}/> : <GaugeChart data={baseGauge} base={true}/>}
+              </div>
+              <div className="flex-child">
+                <RadialStackedBarChart data={faixasEtariasByUf} keys={auxAgeLabels} />
+              </div>
             </div>
           </div>
 
-
-          <div className="flex-container">
-            {/* <div className="flex-child">
-              <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
-            </div> */}
-            <div id="gaugeChart" className="flex-child">
-              {somaUnidades ? <GaugeChart data={gaugeData} base={false}/> : <GaugeChart data={baseGauge} base={true}/>}
+          <div id="teste2">
+            <h1>Resposta 2</h1>
+            <div className="flex-container">
+              <div className="flex-child list-Units">
+                <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
+              </div>
+              <div className="flex-child">
+                <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
+              </div>
+              <div className="flex-child">
+                <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
+              </div>
             </div>
-            <div className="flex-child">
-              <RadialStackedBarChart data={faixasEtariasByUf} keys={auxAgeLabels} />
+
+            <div className="flex-container">
+              <div id="gaugeChart" className="flex-child">
+                {somaUnidades ? <GaugeChart data={gaugeData} base={false}/> : <GaugeChart data={baseGauge} base={true}/>}
+              </div>
+              <div className="flex-child">
+                <RadialStackedBarChart data={faixasEtariasByUf} keys={auxAgeLabels} />
+              </div>
             </div>
           </div>
-
-          {/* <div className="flex-container">
-            <div className="flex-child">
-            <StackedColumnChart data={faixaEtariaData} keys={allKeys} colors={colors}/>
-            </div>
-          </div> */}
 
         </div>
     </React.Fragment>
@@ -222,7 +279,6 @@ export default App;
 
 
 // TODO List
-// *Achar um jeito de Concatenar todos os Arrays de Dados considerando os estados Selecionados.
 // *Fazer Filtro de Sexo para Grafico de Barra Empilhada
 // Adicionar Legenda Hover ao Grafico de Barra
 // *Criar Gráfico de Pena Sentenciada Para os Presos Sentenciados.

@@ -7,7 +7,7 @@ const ListPrisionUnits = ({unidades, somaUnidades}) => {
         <div className="uf-units">
           {unidades.map(({uf, unidades}) =>{
             return(
-                  <h3>{`${unidades} Unidades Prisionais em ${uf}`}</h3>
+                  <h4>{`${unidades} Unidades Prisionais em ${uf}`}</h4>
               )
             }
           )}

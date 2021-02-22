@@ -47,3 +47,33 @@ export const colors = {
   "Homens": "#4EA8DE",
   "Mulheres": "#E56B6F"
 }
+
+export const fieldsSentencasM = [
+  "populacao_ate_6meses_masculino",
+  "populacao_6meses_1ano_masculino",
+  "populacao_1_2anos_masculino",
+  "populacao_2_4anos_masculino",
+  "populacao_4_8anos_masculino",
+  "populacao_8_15anos_masculino",
+  "populacao_15_20anos_masculino",
+  "populacao_20_30anos_masculino",
+  "populacao_30_50anos_masculino",
+  "populacao_50_100anos_masculino",
+  "populacao_mais_de_100anos_masculino",
+  "populacao_pena_nao_informada_masculino",
+]
+
+export const fieldsSentencasF = [
+  "populacao_ate_6meses_feminino",
+  "populacao_6meses_1ano_feminino",
+  "populacao_1_2anos_feminino",
+  "populacao_2_4anos_feminino",
+  "populacao_4_8anos_feminino",
+  "populacao_8_15anos_feminino",
+  "populacao_15_20anos_feminino",
+  "populacao_20_30anos_feminino",
+  "populacao_30_50anos_feminino",
+  "populacao_50_100anos_feminino",
+  "populacao_mais_de_100anos_feminino",
+  "populacao_pena_nao_informada_feminino"
+]
