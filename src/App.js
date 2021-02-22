@@ -197,22 +197,12 @@ const App = () => {
               <div className="flex-child">
                 <div id="btn-div" onClick={()=>clickFunction("btn-div", "teste")}>
                   <div className="perguntas">
-                    <h2>Pergunta 1</h2>
+                    <h2>Perguntas</h2>
                     <p className="pergunta-text">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nunc quam turpis, bibendum sed mattis quis, hendrerit sodales est.
-                      Nulla vitae est commodo, mattis quam id?
+                      1- Como Se dá a Distribuição de Presos no sistema Prisional Brasileiro em relação à população prisional?
                     </p>
-                  </div>
-                </div>
-
-                <div id="btn-div2" onClick={()=>clickFunction("btn-div2", "teste2")}>
-                  <div className="perguntas">
-                    <h2>Pergunta 2</h2>
                     <p className="pergunta-text">
-                    Sed maximus nunc ut faucibus vestibulum. 
-                    Morbi placerat, purus eget condimentum mollis, sem odio tristique mauris, 
-                    a varius lacus massa ut libero. Nulla vehicula ex vehicula?
+                      2- Em relação à população prisional, Qual a proporção situação dos presos provisórios e sentenciados por estado brasileiro?
                     </p>
                   </div>
                 </div>
@@ -223,7 +213,6 @@ const App = () => {
             </div>
 
           <div id="teste">
-            <h1>Resposta 1</h1>
             <div className="flex-container">
               <div className="flex-child">
               <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
@@ -233,30 +222,6 @@ const App = () => {
               </div>
               <div className="flex-child list-Units">
               <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
-              </div>
-            </div>
-
-            <div className="flex-container">
-              <div id="gaugeChart" className="flex-child">
-                {somaUnidades ? <GaugeChart data={gaugeData} base={false}/> : <GaugeChart data={baseGauge} base={true}/>}
-              </div>
-              <div className="flex-child">
-                <RadialStackedBarChart data={faixasEtariasByUf} keys={auxAgeLabels} />
-              </div>
-            </div>
-          </div>
-
-          <div id="teste2">
-            <h1>Resposta 2</h1>
-            <div className="flex-container">
-              <div className="flex-child list-Units">
-                <ListPrisionUnits unidades={unidades} somaUnidades={somaUnidades} />
-              </div>
-              <div className="flex-child">
-                <StackedBarChart data={StackedBarData} keys={allKeys} colors={colors}/>
-              </div>
-              <div className="flex-child">
-                <PieChart data={unidades_p_estado} prisionFilters={prisionFilters} setPrisionFilters={setPrisionFilters}/>
               </div>
             </div>
 
